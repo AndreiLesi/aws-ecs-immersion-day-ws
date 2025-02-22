@@ -8,7 +8,6 @@ module "ecs_service" {
   memory = 512
   enable_execute_command = true
   health_check_grace_period_seconds = 60
-  autoscaling_policies = var.autoscaling_policy
 
   # Container definition(s)
   container_definitions = {
@@ -21,6 +20,13 @@ module "ecs_service" {
       readonly_root_filesystem = false
       environment = local.environment_variables
       secrets = local.secrets
+      health = {
+        command = ["CMD-SHELL", "curl -f http://localhost:8080/${var.healthcheck_path} || exit 1"]
+        interval = 30
+        retries  = 3
+        timeout  = 5
+        start_period = 60
+      }
       port_mappings = [
         {
           name          = "application"
@@ -43,13 +49,6 @@ module "ecs_service" {
         discovery_name = var.container_name
         }
     }
-
-    load_balancer = var.load_balancer_target_group_arn != "" ? [{
-        target_group_arn = var.load_balancer_target_group_arn
-        container_name   = "application"
-        container_port   = var.container_port
-        
-    }] : []
 
   subnet_ids = var.subnet_ids
   security_group_rules = {

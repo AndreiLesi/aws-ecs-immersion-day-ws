@@ -43,31 +43,3 @@ variable "healthcheck_path" {
 variable "service_namespace_arn" {
   description = "The ARN of the service discovery namespace"
 }
-
-variable "load_balancer_target_group_arn" {
-  description = "The ARN of the target group to associate with the service"
-  type        = string
-  default = ""
-}
-
-variable "autoscaling_policy" {
-  description = "The autoscaling policy to use for the service"
-  default = {
-    "cpu": {
-      "policy_type": "TargetTrackingScaling",
-      "target_tracking_scaling_policy_configuration": {
-        "predefined_metric_specification": {
-          "predefined_metric_type": "ECSServiceAverageCPUUtilization"
-        }
-      }
-    },
-    "memory": {
-      "policy_type": "TargetTrackingScaling",
-      "target_tracking_scaling_policy_configuration": {
-        "predefined_metric_specification": {
-          "predefined_metric_type": "ECSServiceAverageMemoryUtilization"
-        }
-      }
-    }
-  }
-}

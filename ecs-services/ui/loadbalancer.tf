@@ -43,7 +43,7 @@ module "alb" {
       health_check = {
         enabled             = true
         interval            = 30
-        path                = "/actuator/health"
+        path                = local.healthcheck_path
         port                = "traffic-port"
         healthy_threshold   = 2
         unhealthy_threshold = 3
