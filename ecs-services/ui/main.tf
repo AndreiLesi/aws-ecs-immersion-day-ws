@@ -32,12 +32,12 @@ module "ecs_service" {
       readonly_root_filesystem = false
       environment = local.environment_variables
       secrets = local.secrets
-      health = {
-        command = ["CMD-SHELL", "curl -f http://localhost:8080/${local.healthcheck_path} || exit 1"]
+      health_check = {
+        command = ["CMD-SHELL", "curl -f http://localhost:8080${local.healthcheck_path} || exit 1"]
         interval = 30
         retries  = 3
         timeout  = 5
-        start_period = 60
+        startperiod = 60
       }
       port_mappings = [
         {

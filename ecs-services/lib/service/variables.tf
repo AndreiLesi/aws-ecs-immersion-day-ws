@@ -43,3 +43,9 @@ variable "healthcheck_path" {
 variable "service_namespace_arn" {
   description = "The ARN of the service discovery namespace"
 }
+
+variable "tasks_iam_role_policies" {
+  description = "A list of IAM policy ARNs to attach to the task execution role"
+  type        = map(string)
+  default     = {}
+}
