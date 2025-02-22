@@ -24,6 +24,7 @@ module "service-ui" {
   environment_variables = {
     ENDPOINTS_CATALOG  = "http://${module.service-catalog.service_output.name}"
     ENDPOINTS_ASSETS   = "http://${module.service-assets.service_output.name}"
+    ENDPOINTS_CARTS    = "http://${module.service-carts.service_output.name}"
   }
 }
 
@@ -35,4 +36,13 @@ module "service-catalog" {
   service_namespace_arn = module.core-infra.service_discovery_namespace_arn
   vpc_id = module.core-infra.vpc.vpc_id
   healthcheck_path = "/health"
+}
+
+module "service-carts" {
+  source = "./ecs-services/carts"
+  project_name = local.project_name
+  cluster_arn = module.core-infra.cluster_arn
+  subnet_ids = module.core-infra.vpc.private_subnets
+  service_namespace_arn = module.core-infra.service_discovery_namespace_arn
+  healthcheck_path = "/actuator/health"
 }
